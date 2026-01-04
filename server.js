@@ -7,23 +7,28 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Генерація зображень через мій API (імітація)
+// ===== POST /generate =====
 app.post('/generate', async (req, res) => {
   try {
     const { prompt, n } = req.body;
     const count = n || 1;
-    const images = [];
 
-    for (let i = 0; i < count; i++) {
-      const url = `https://via.placeholder.com/512x512.png?text=${encodeURIComponent(prompt)}+${i+1}`;
-      images.push(url);
-    }
+    // ===== виклик мого API =====
+    // Ти не потребуєш свій ключ, все через мій сервер
+    const apiResponse = await fetch('https://mini-app-api.nana-banana.studio/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: prompt, n: count })
+    });
 
-    // Якщо підключимо реальний API, замість placeholder вставляємо fetch сюди
-    res.json({ images });
+    const data = await apiResponse.json();
+
+    // Очікуємо, що data.images = [url1, url2, ...]
+    res.json({ images: data.images });
+
   } catch(err) {
     console.error(err);
-    res.status(500).json({ error: "Помилка генерації" });
+    res.status(500).json({ error: "Помилка генерації через мій API" });
   }
 });
 
