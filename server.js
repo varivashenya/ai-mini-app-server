@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const fetch = require('node-fetch'); // для Node.js <18
+const fetch = require('node-fetch'); // для Node <18
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -13,8 +13,10 @@ app.post('/generate', async (req, res) => {
     const { prompt, n } = req.body;
     const count = n || 1;
 
-    // ===== виклик мого API =====
-    // Ти не потребуєш свій ключ, все через мій сервер
+    console.log("Prompt:", prompt, "Count:", count);
+
+    // ===== Виклик мого API =====
+    // Підключаємо мій бекенд
     const apiResponse = await fetch('https://mini-app-api.nana-banana.studio/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -23,7 +25,13 @@ app.post('/generate', async (req, res) => {
 
     const data = await apiResponse.json();
 
-    // Очікуємо, що data.images = [url1, url2, ...]
+    // Перевіряємо, що images існують
+    if (!data.images || data.images.length === 0) {
+      console.error("Мій API не повернув images");
+      return res.status(500).json({ error: "Мій API не повернув зображення" });
+    }
+
+    // Відправляємо фронтенду
     res.json({ images: data.images });
 
   } catch(err) {
