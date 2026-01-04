@@ -16,8 +16,8 @@ app.post('/generate', async (req, res) => {
     console.log("Prompt:", prompt, "Count:", count);
 
     // ===== Виклик мого API =====
-    // Підключаємо мій бекенд
-    const apiResponse = await fetch('https://mini-app-api.nana-banana.studio/generate', {
+    // Це внутрішній виклик через мій обліковий механізм
+    const apiResponse = await fetch('https://ai-mini-app-server.onrender.com/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt: prompt, n: count })
@@ -25,13 +25,11 @@ app.post('/generate', async (req, res) => {
 
     const data = await apiResponse.json();
 
-    // Перевіряємо, що images існують
+    // Перевірка
     if (!data.images || data.images.length === 0) {
-      console.error("Мій API не повернув images");
       return res.status(500).json({ error: "Мій API не повернув зображення" });
     }
 
-    // Відправляємо фронтенду
     res.json({ images: data.images });
 
   } catch(err) {
