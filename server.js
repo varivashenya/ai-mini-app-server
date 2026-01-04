@@ -10,7 +10,7 @@ app.use(express.json({ limit: "5mb" }));
 const PORT = process.env.PORT || 10000;
 
 // ⛔ СЮДИ ВСТАВИШ СВІЙ OPENAI API KEY
-const OPENAI_API_KEY = "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";
+const OPENAI_API_KEY = "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";
 
 app.post("/generate", async (req, res) => {
   try {
