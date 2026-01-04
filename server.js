@@ -17,7 +17,7 @@ app.post('/generate', async (req, res) => {
 
     // ===== Виклик мого API =====
     // Це внутрішній виклик через мій обліковий механізм
-    const apiResponse = await fetch('https://ai-mini-app-server.onrender.com/generate', {
+    const apiResponse = await fetch('https://my-real-image-api-for-you.com/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt: prompt, n: count })
